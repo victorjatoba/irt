@@ -15,13 +15,13 @@ function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estima
     result_b = [];
     result_c = [];
     for i=1:NumIterations
-
+%{
        result_a = [result_a; [a_hat log_likelihood(Y, theta, a_hat, b, c, D)]];
        a_hat = a_hat + alpha * derivative_a(Y, theta, a_hat, b, c, D);
-    %{
+%}
        result_b = [result_b; [b_hat log_likelihood(Y, theta, a, b_hat, c, D)]];
-       b_hat = b_hat + alpha * derivative_b(theta, a, b_hat, c, D);
-
+       b_hat = b_hat + alpha * derivative_b(Y, theta, a, b_hat, c, D);
+    %{
        result_c = [result_c; [c_hat log_likelihood(Y, theta, a, betas,c_hat,D)]];
        c_hat = c_hat + alpha * derivative_c(theta,a,betas,D);
     %}

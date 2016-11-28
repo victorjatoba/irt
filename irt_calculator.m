@@ -44,7 +44,7 @@ ylabel('estimator');
 figure;
 hold on
 for i = 1:N
-    plot(result_a(:,i));
+    plot(result_b(:,i));
     
 end
 xlabel('iterations number');
