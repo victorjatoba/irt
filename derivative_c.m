@@ -1,7 +1,9 @@
-function result = derivative_c( theta,a,b,D )
-%DERIVATIVE_C Derivative of guessing parameter
-%   derivative_c = @(theta,a,b,D) Q_star(theta,a,b,D);
+function result = derivative_c( Y, theta,a,b,c,D )
+%DERIVATIVE_B Derivative of difficult parameter (Reff.: Andrade 3.15)
+%   Y: Set of the users responses
+%   theta: The theta value of the user
+%   a, b, c, D: items parameters
     
-    result = Q_star(theta,a,b,D);
+    result = sum((Y - Pji(theta,a,b,c,D)).* (Wji(theta,a,b,c,D) ./ P_star(theta,a,b,D)) );
 end
 
