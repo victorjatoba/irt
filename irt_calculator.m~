@@ -31,7 +31,7 @@ c = rand(1,Num_items); % Generating N randon b
 
 %theta = 1;
 %theta = deal(ones(1,Num_students));
-theta = randn(1,Num_students);
+theta = rand(1,Num_students);
 
 D = 1;
 
@@ -44,8 +44,7 @@ Y = P > rand(1,Num_items); % fill the Y vector, that contains the probabilities
 
 Y = fill_responses(theta, a, b, c, D);
 
-thetas_hat = randn(1,Num_students);
-
+thetas_hat
 % Birbaum (1968) Method to estimate thetas and items params
 for i=1:100
     [result_a, result_b, result_c, a_hat, b_hat, c_hat] = gradient_estimator_item(2000, Num_items, Y, thetas_hat, D);

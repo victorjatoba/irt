@@ -6,10 +6,15 @@ function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estima
 %   theta: The theta value of the user
 %   a, b, c, D: items parameters
 
+
+O1, O2,         O3, ..., On
+alpha (2)        1-alpha
+Pr(O < x)
+
+
     a_hat = deal(zeros(1,Num_items)); % Initialize vector of N zeros
     b_hat = deal(zeros(1,Num_items));
     c_hat = deal(zeros(1,Num_items));
-
     a_ant = a_hat;
     b_ant = b_hat;
     c_ant = c_hat;
@@ -19,13 +24,14 @@ function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estima
     result_b = [];
     result_c = [];
     for i=1:NumIterations
-       result_a = [result_a; [a_ant log_likelihood_item(Y, theta, a_ant, b_ant, c_ant, D)]];
+
+       result_a = [result_a; [a_ant log_likelihood(Y, theta, a_ant, b_ant, c_ant, D)]];
        a_hat = a_ant + alpha * derivative_a(Y, theta, a_ant, b_ant, c_ant, D);
 
-       result_b = [result_b; [b_ant log_likelihood_item(Y, theta, a_ant, b_ant, c_ant, D)]];
+       result_b = [result_b; [b_ant log_likelihood(Y, theta, a_ant, b_ant, c_ant, D)]];
        b_hat = b_ant + alpha * derivative_b(Y, theta, a_ant, b_ant, c_ant, D);
 
-       result_c = [result_c; [c_ant log_likelihood_item(Y, theta, a_ant, b_ant,c_ant,D)]];
+       result_c = [result_c; [c_ant log_likelihood(Y, theta, a_ant, b_ant,c_ant,D)]];
        c_hat = c_ant + alpha * derivative_c(Y, theta, a_ant, b_ant, c_ant, D);
         
        a_ant = a_hat;
