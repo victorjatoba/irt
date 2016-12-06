@@ -6,9 +6,10 @@ function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estima
 %   theta: The theta value of the user
 %   a, b, c, D: items parameters
 
-    a_hat = deal(zeros(1,Num_items)); % Initialize vector of N zeros
-    b_hat = deal(zeros(1,Num_items));
-    c_hat = deal(zeros(1,Num_items));
+    % Initial estimators items params
+    a_hat = deal(zeros(1,Num_items)); %vector of zeros
+    b_hat = deal(zeros(1,Num_items)); %vector of zeros
+    c_hat = deal(zeros(1,Num_items)); %vector of zeros
 
     a_ant = a_hat;
     b_ant = b_hat;

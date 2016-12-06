@@ -5,52 +5,23 @@
 % Author: Victor Jatoba
 % Date: 11/18/16 [mm/dd/yy]
 
-%N_items = 175;
-%N_students = 1414;
-Num_items = 175;
-Num_students = 1414;
+% import data
+tic;
+U = importdata('matriz.txt', ' ', 0);
 
-% Initialize attributes values
+Num_students = size(U,1); %1414 responsers
+Num_items = size(U,2); % 175 items
 
-a = rand(1,Num_items);
-%a = deal(ones(1,Num_items)); % Generating N randon b
-%a = 1;
-%a = [0.5,1,1.3];
-%a = 1.3;
+D = 1; % Constant value
 
-b = rand(1,Num_items); % Generating N randon b
-%b = deal(ones(1,Num_items)); % Generating N randon b
-%b = [1,1,1.5];
-%b = 1.5;
-
-c = rand(1,Num_items); % Generating N randon b
-%c = deal(ones(1,Num_items)); % Generating N randon b
-%c = 1;
-%c = [0,0,0.2];
-%c = 0.2;
-
-%theta = 1;
-%theta = deal(ones(1,Num_students));
-theta = randn(1,Num_students);
-
-D = 1;
-
-%{
-% Simulate N user responses known parametes
-P = Pji(theta,a,b,c,D);
-Y = P > rand(1,Num_items); % fill the Y vector, that contains the probabilities
-%}
-%log_like = log_likelihood(Y, theta, a, b, c, D);
-
-Y = fill_responses(theta, a, b, c, D);
-
-thetas_hat = randn(1,Num_students);
+% Initialize thetas estimators with normal values (values near zero)
+theta_hat = randn(1,Num_students);
 
 % Birbaum (1968) Method to estimate thetas and items params
-for i=1:100
-    [result_a, result_b, result_c, a_hat, b_hat, c_hat] = gradient_estimator_item(2000, Num_items, Y, thetas_hat, D);
+for i=1:3
+    [result_a, result_b, result_c, a_hat, b_hat, c_hat] = gradient_estimator_item(200, Num_items, U, theta_hat, D);
 
-    [result_theta, thetas_hat] = gradient_estimator_theta(2000, Num_students, Y, a_hat, b_hat, c_hat, D);
+    [result_theta, thetas_hat] = gradient_estimator_theta(2000, Num_students, U, a_hat, b_hat, c_hat, D);
 end
 
 %{
@@ -117,3 +88,5 @@ ylabel('estimator');
 title('c Estimator Graph');
 legend('1','2','3','4','5','6','7','8','9','10','Location','northwest');
 %}
+
+toc;

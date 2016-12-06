@@ -7,8 +7,8 @@
 
 %N_items = 175;
 %N_students = 1414;
-Num_items = 175;
-Num_students = 1414;
+Num_students = 10;
+Num_items = 1000;
 
 % Initialize attributes values
 
@@ -30,21 +30,23 @@ c = rand(1,Num_items); % Generating N randon b
 %c = 0.2;
 
 %theta = 1;
-%theta = deal(ones(1,Num_students));
-theta = rand(1,Num_students);
+theta = deal(ones(1,Num_students));
+%theta = randn(1,Num_students);
 
 D = 1;
 
 %{
 % Simulate N user responses known parametes
 P = Pji(theta,a,b,c,D);
-Y = P > rand(1,Num_items); % fill the Y vector, that contains the probabilities
+U = P > rand(1,Num_items); % fill the Y vector, that contains the probabilities
 %}
 %log_like = log_likelihood(Y, theta, a, b, c, D);
 
-Y = fill_responses(theta, a, b, c, D);
+U = fill_responses(theta, a, b, c, D);
 
-thetas_hat
+% Initialize thetas estimators with normal values (values near zero)
+theta_hat = deal(zeros(1,Num_students));
+
 % Birbaum (1968) Method to estimate thetas and items params
 for i=1:100
     [result_a, result_b, result_c, a_hat, b_hat, c_hat] = gradient_estimator_item(2000, Num_items, Y, thetas_hat, D);
