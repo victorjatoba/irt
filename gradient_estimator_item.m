@@ -1,15 +1,10 @@
-function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estimator_item( NumIterations, Num_items, Y, theta, D )
+function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estimator_item( NumIterations, Y, theta, D, a_hat, b_hat, c_hat)
 %GRADIENT_ESTIMATOR_ITEM Item params estimator with Gradient method
 %   NumIterations: Number of the loop itarations
 %   N: params lenth
 %   Y: Set of the users responses
 %   theta: The theta value of the user
 %   a, b, c, D: items parameters
-
-    % Initial estimators items params
-    a_hat = deal(zeros(1,Num_items)); %vector of zeros
-    b_hat = deal(zeros(1,Num_items)); %vector of zeros
-    c_hat = deal(zeros(1,Num_items)); %vector of zeros
 
     a_ant = a_hat;
     b_ant = b_hat;

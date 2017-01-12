@@ -1,0 +1,61 @@
+# Experiment 04
+# Date: 07-01-17
+
+Initial values
+theta: Initialize estimators with normal values (values near zero)
+	theta_hat = randn(1,Num_students);
+item: Initialize estimators with normal values
+	a_hat, b_hat = randn(1,Num_items);
+	c_hat(i) = 1/5
+
+Birbaum Algoritm:
+	100 iterations
+
+Gradient Estimator item: 50
+Gradient Estimator Theta: 200
+
+Time: 12:54:31
+
+OBS.: Os gráficos ficaram lineares
+
+
+
+
+
+
+% IRT algorithm calculator
+% Ref.: [BOOK] Andrade, TRI Conceitos e Aplicações 
+%       http://egov.ufsc.br/portal/sites/default/files/livrotri.pdf
+%
+% Author: Victor Jatoba
+% Date: 11/18/16 [mm/dd/yy]
+
+% import data
+tic;
+U = importdata('matriz.txt', ' ', 0);
+
+Num_students = size(U,1); %1414 responsers
+Num_items = size(U,2); % 175 items
+
+D = 1; % Constant value
+
+% Initialize thetas estimators with normal values (values near zero)
+theta_hat = randn(1,Num_students);
+% Initial estimators items params
+a_hat = randn(1,Num_items); %vector of zeros
+b_hat = randn(1,Num_items); %vector of zeros
+c_hat = [];
+for i=1:Num_items
+    c_hat(i) = 1/5;
+end
+
+% Birbaum (1968) Method to estimate thetas and items params
+for i=1:100
+    [result_a, result_b, result_c, a_hat, b_hat, c_hat] = gradient_estimator_item(50, Num_items, U, theta_hat, D, a_hat, b_hat, c_hat);
+    %plotar os likelihoods
+    [result_theta, theta_hat] = gradient_estimator_theta(200, Num_students, U, a_hat, b_hat, c_hat, D, theta_hat);
+end
+
+toc;
+
+print_results(Num_students, Num_items, result_theta, result_a, result_b, result_c, 1);

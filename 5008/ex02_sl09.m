@@ -7,7 +7,7 @@
 
 N = 1000;
 
-betas = rand(1,N); % Generating N randon betas
+betas = rand(1,N); % Generating N randon betas1
 %betas = [0 1 0 1 0 1 0 1 0 1];
 thetas = [1 1 1 1 1];
 %thetas = rand(1,N);

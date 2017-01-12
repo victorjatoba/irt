@@ -1,0 +1,17 @@
+# Experiment 02
+# Date: 15-12-16
+
+Initial values
+theta: Initialize estimators with normal values (values near zero)
+	theta_hat = randn(1,Num_students);
+item: Initialize estimators with zeros
+	a_hat, b_hat, c_hat = deal(zeros(1,Num_items));
+
+Birbaum Algoritm:
+	3 iterations
+
+Gradient Estimator item: 200
+
+Gradient Estimator Theta: 2000
+
+Time: 02:48:56

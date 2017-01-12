@@ -1,4 +1,4 @@
-function result = log_likelihood( U,theta,a,b,c,D )
+function result = log_likelihood_item( U,theta,a,b,c,D )
 %LOG_LIKELIHOOD Log likelihood Function
 %   log_likelihood = @(Y,theta,a,b,c,D) sum(Y.* log(Pji(theta,a,b,c,D)) + (1 - Y).* log(Qji(theta,a,b,c,D)));
 %   result = sum(Y.* log(Pji(theta,a,b,c,D)) + (1 - Y).* log(Qji(theta,a,b,c,D)));
