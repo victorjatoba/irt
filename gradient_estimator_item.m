@@ -23,7 +23,7 @@ function [ result_a, result_b, result_c, a_hat, b_hat, c_hat ] = gradient_estima
 
        result_c = [result_c; [c_ant log_likelihood_item(Y, theta, a_ant, b_ant,c_ant,D)]];
        c_hat = c_ant + alpha * derivative_c(Y, theta, a_ant, b_ant, c_ant, D);
-        
+       
        a_ant = a_hat;
        b_ant = b_hat;
        c_ant = c_hat;
