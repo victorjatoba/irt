@@ -1,3 +1,29 @@
+# Experiment 08
+# Date: 16-01-17
+
+ML2 Experiment
+
+Initial values
+theta: Initialize estimators with normal values (values near zero)
+	theta_hat = randn(1,Num_students);
+item: Initialize estimators with normal values
+	a_hat, b_hat = randn(1,Num_items);
+
+Birbaum Algoritm:
+	15 iterations
+
+Gradient Estimator item: 50
+Gradient Estimator Theta: 2000
+
+Time: 02:54:33
+
+OBS.: Os valores ficaram com NaN
+
+
+
+____________
+CÓDIGO:
+
 % ML2 IRT algorithm calculator
 % Ref.: [BOOK] Andrade, TRI Conceitos e Aplicações 
 %       http://egov.ufsc.br/portal/sites/default/files/livrotri.pdf

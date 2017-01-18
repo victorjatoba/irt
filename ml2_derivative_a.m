@@ -19,7 +19,7 @@ function a_hat = ml2_derivative_a( U,theta,a,b,D )
 
             theta_j = theta(1,j);
 
-            a_sum = a_sum + ( ((U(j, i) - ml2_Pji(theta_j, a_i, b_i, D)) / (ml2_Pji(theta_j, a_i, b_i, D).*ml2_Qji(theta_j, a_i, b_i, D)) ) .* -( (D*(theta_j-b_i) .* exp(L(theta_j,a_i,b_i,D))) / ((1 + exp(L(theta_j,a_i,b_i,D)))*(1 + exp(L(theta_j,a_i,b_i,D)))) ) );
+            a_sum = a_sum + ( ((U(j, i) - ml2_Pji(theta_j, a_i, b_i, D)) / (ml2_Pji(theta_j, a_i, b_i, D).*ml2_Qji(theta_j, a_i, b_i, D)) ) .* -( (D*(theta_j-b_i) .* exp(L(theta_j,a_i,b_i,D))) / ((1 + exp(L(theta_j,a_i,b_i,D))).^2) ) );
         end
         a_hat(i) = a_sum;
     end

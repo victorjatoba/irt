@@ -14,7 +14,7 @@ function thetas_hat = ml2_derivative_theta( U,theta,a,b,D )
             b_i = b(1,i);
 
             %theta_sum = theta_sum + ((Y(1, y_it) * (1 / (1 + exp(theta_i*beta_j))) * beta_j) - ((1 - Y(1, y_it)) * logito(theta_i*beta_j) * beta_j));
-            theta_sum = theta_sum + ( ((U(j, i) - ml2_Pji(theta_j, a_i, b_i, D)) / (ml2_Pji(theta_j, a_i, b_i, D).*ml2_Qji(theta_j, a_i, b_i, D)) ) .* ( (a_i .* D .* exp(L(theta_j,a_i,b_i,D))) / ((1 + exp(L(theta_j,a_i,b_i,D)))*(1 + exp(L(theta_j,a_i,b_i,D)))) ) );
+            theta_sum = theta_sum + ( ((U(j, i) - ml2_Pji(theta_j, a_i, b_i, D)) / (ml2_Pji(theta_j, a_i, b_i, D).* ml2_Qji(theta_j, a_i, b_i, D)) ).* ( (a_i .* D .* exp(L(theta_j,a_i,b_i,D))) / ((1 + exp(L(theta_j,a_i,b_i,D))).^2) ) );
         end
         thetas_hat(j) = theta_sum;
     end
