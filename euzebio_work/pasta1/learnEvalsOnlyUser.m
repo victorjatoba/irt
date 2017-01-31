@@ -1,6 +1,4 @@
-tic;
-
-%valuesAlat = [1 2 3 4 5 10 20 30 40 50];
+valuesAlat = [1 2 3 4 5 10 20 30 40 50];
 valuesAlat = 4;
 alpha = 10;
 lambda = 0;
@@ -16,72 +14,67 @@ load('areaItens.mat');
 
 
 for turns=1:numTurnos
-    % Seleção dos grupos
-    idAlunos = unique(evals(:,1)); % Indice de alunos por posicao nos dados (vetor de ids)
-    idQuestoes = unique(evals(:,2)); % Indice de questoes por ID (vetor de ids)
-    idQuestoesTrain = datasample(unique(evals(:,2)), round(numel(unique(evals(:,2)))/2), 'Replace', false); % pega metade das 180 questoes
 
-    evalsTrain = evals(ismember(evals(:,2),idQuestoesTrain),:); % Questoes de (Grupo) treinamento 125547x3
-    evalsTest = evals(~ismember(evals(:,2),idQuestoesTrain),:); % Questoes de (Grupo) teste 125203x3
+    idAlunos = unique(evals(:,1)); %indice de alunos por posicao nos dados
+    idQuestoes = unique(evals(:,2)); %indice de questoes por ID
+    idQuestoesTrain = datasample(unique(evals(:,2)), round(numel(unique(evals(:,2)))/2), 'Replace', false);
 
-    for Alat =valuesAlat % 4 itetacoes
-        % Primeiro gera-se, com o algoritmo e os microdados adaptados, o modelo de atributos latentes dos itens do ENEM para um dos grupos de dados.
-        % Inicializa os estimadores thetaUser e thetaObj
-        
-        % load(strcat('Alat-', num2str(Alat),'-turn-1-workspace.mat'));
+
+    evalsTrain = evals(ismember(evals(:,2),idQuestoesTrain),:);
+    evalsTest = evals(~ismember(evals(:,2),idQuestoesTrain),:);
+
+    for Alat =valuesAlat
+    
+%        load(strcat('Alat-', num2str(Alat),'-turn-1-workspace.mat'));
+
         aucPlot = [];
-        thetaMax = sqrt(1e300/sigma/Alat); % Valores maximos para o theta. =~ 2.5*10^299
+        thetaMax = sqrt(1e300/sigma/Alat);
 
         erroPlot = [];
+    
         
-        thetaUser = -1+2*rand(numel(idAlunos),Alat); % init matrix 1461 x 4
+        thetaUser = -1+2*rand(numel(idAlunos),Alat);
         %thetaUser = rand(numel(idAlunos),Alat);
         
-        thetaUser(:,Alat) = -1; % inicializa ultima coluna com -1
+        thetaUser(:,Alat) = -1;
         
-        thetaObj = -1+2*rand(numel(idQuestoes),Alat); %init matrix 185 x 4
+        
+        %thetaObj = -1+2*rand(numel(idQuestoes),Alat);
         %thetaObj = eye(Alat);
         
-        for iterations=1:numLearnStep % 5000 itetacoes
+        for iterations=1:numLearnStep
             
-            if mod(iterations,rateEvaluate) == 0 % Entra nas primeiras 99 iteracoes
+            
+            if mod(iterations,rateEvaluate) == 0
                 auc = 0;
                 erro = 0;
-                for i=1:size(evalsTrain,1) % 132336 it
-                    u = find(idAlunos==evalsTrain(i,1)); % retorna a posicao do aluno (elem i) do vetor idAlunos
-                    q = find(idQuestoes==evalsTrain(i,2)); % retorna a posicao da questao (elem i) do vetor idQuestoes
-                    % thetaUser(u,:) Traz a linha u
-                    % ' é a transporta da matriz
-                    % ((thetaObj(q,:)*thetaUser(u,:)')>0) Retorna 1 se o produto das matrizes for maior que 1
-                    % evalsTrain(i,3) resposta do usuario i a questao j
-                    auc = auc + (evalsTrain(i,3)==((thetaObj(q,:)*thetaUser(u,:)')>0)); % soma da verificacao da igualdade entre o produto e a resposta
-                    x = thetaObj(q,:)*thetaUser(u,:)'; % produto dos vetores
-                    if evalsTrain(i,3) % se a resposta for correta
-                        if (-sigma*x > 700) % Nunca entra
+                for i=1:size(evalsTrain,1)
+                    u = find(idAlunos==evalsTrain(i,1));
+                    q = find(idQuestoes==evalsTrain(i,2));
+                    auc = auc + (evalsTrain(i,3)==((thetaObj(q,:)*thetaUser(u,:)')>0));
+                    x = thetaObj(q,:)*thetaUser(u,:)';
+                    if evalsTrain(i,3)
+                        if (-sigma*x > 700)
                             erro = erro - 1e300;
-                            disp('#1#')
                         else
-                            erro = erro + log(1/(1+exp(-sigma*x))); % Calcula P
+                            erro = erro + log(1/(1+exp(-sigma*x)));
                         end
                     else
-                        if (-sigma*x > 700) % Nunca entra
-                            disp('#2#')
+                        if (-sigma*x > 700)
                             erro = erro;
                         else
-                            erro = erro + log(1 - 1/(1+exp(-sigma*x))); % Calcula Q
+                            erro = erro + log(1 - 1/(1+exp(-sigma*x)));
                         end
                     end
                 end
-                erro = erro - lambda*(sum(sum(thetaObj.^2))+sum(sum(thetaUser.^2))); % erro nao eh alterado
+                erro = erro - lambda*(sum(sum(thetaObj.^2))+sum(sum(thetaUser.^2)));
 
-                aucPlot(iterations/rateEvaluate,turns) = auc/size(evalsTrain,1); % vetor com 50 itens
+                aucPlot(iterations/rateEvaluate,turns) = auc/size(evalsTrain,1);
                 %sqrt(auc)/(nObj*nUser)
-                
                 disp(['auc = ' num2str(auc/size(evalsTrain,1))]);
                 disp(['loglikelihood = ' num2str(erro/size(evalsTrain,1))]);
                 disp(['percentage de execution = ' num2str(iterations/numLearnStep)]);
                 erroPlot(iterations/rateEvaluate,turns) = erro/size(evalsTrain,1);
-                
                 %max(max(abs(thetaObj*thetaUser')))
 
                 %         pause
@@ -89,14 +82,13 @@ for turns=1:numTurnos
             
             
             
-            deltaUser1 = zeros(numel(idAlunos),Alat); % Init matriz com zeros
+            deltaUser1 = zeros(numel(idAlunos),Alat);
             %deltaObj1 = zeros(numel(idQuestoes),Alat);
             
-            for i=1:numEvalPerIteration % 500 it
-                % Algoritmo busca por gradiente
+            for i=1:numEvalPerIteration
                 index = randi(size(evalsTrain,1));
-                u = find(idAlunos==evalsTrain(index,1)); % Id do aluno
-                q = find(idQuestoes==evalsTrain(index,2)); % Id da questao
+                u = find(idAlunos==evalsTrain(index,1));
+                q = find(idQuestoes==evalsTrain(index,2));
                 
                 if evalsTrain(index,3)
                     x = (thetaObj(q,:))*thetaUser(u,:)'; %calcula x_uij
@@ -119,7 +111,6 @@ for turns=1:numTurnos
             end
             
             %thetaUser = thetaUser + alpha*deltaUser; %atualiza theta
-            % Atualizacao do gradiente (theta em t+1)
             thetaUser = max(min(thetaUser + alpha*deltaUser,thetaMax),-thetaMax);
                     thetaUser(:,Alat) = -1;
 
@@ -132,7 +123,7 @@ for turns=1:numTurnos
         auc = 0;
         erro = 0;
         
-        for i=1:size(evalsTest,1) % 126414 it
+        for i=1:size(evalsTest,1)
             u = find(idAlunos==evalsTest(i,1));
             q = find(idQuestoes==evalsTest(i,2));
             
@@ -157,8 +148,6 @@ for turns=1:numTurnos
         auc = auc/size(evalsTest,1)
         erro = erro/size(evalsTest,1)
         
-        save(strcat('user2-Alat-', num2str(Alat), '-turn-', num2str(turns), '.mat'), 'alpha', 'thetaObj', 'thetaUser', 'aucPlot', 'erroPlot', 'auc', 'erro', 'idQuestoesTrain');
+        %save(strcat('user2-Alat-', num2str(Alat), '-turn-', num2str(turns), '.mat'), 'alpha', 'thetaObj', 'thetaUser', 'aucPlot', 'erroPlot', 'auc', 'erro', 'idQuestoesTrain');
     end
 end
-
-toc;
